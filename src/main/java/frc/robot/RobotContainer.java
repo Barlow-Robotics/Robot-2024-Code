@@ -93,10 +93,16 @@ public class RobotContainer {
     private final ReverseFloorIntake reverseFloorIntakeCmd = new ReverseFloorIntake(floorIntakeSub);
 
 
-    private final PivotToPoint piviotToSpeakerCommand = new PivotToPoint(new Pose2d(0.5, 5.59, new Rotation2d(0)), driveSub);
+    private final PivotToPoint piviotToSpeakerCommand = new PivotToPoint(new Pose2d(0.44, 5.55, new Rotation2d(0)), driveSub);
     private final PivotToPoint piviotToCenterNoteCommand = new PivotToPoint(new Pose2d(2.90, 5.55, new Rotation2d(0)), driveSub);
     private final PivotToPoint piviotToAmpNoteCommand = new PivotToPoint(new Pose2d(2.90, 7, new Rotation2d(0)), driveSub);
     private final PivotToPoint piviotToStageNoteCommand = new PivotToPoint(new Pose2d(2.90, 4.10, new Rotation2d(0)), driveSub);
+
+
+    private final PivotToPoint piviotToSpeakerCommandRED = new PivotToPoint(new Pose2d(16.1, 5.55, new Rotation2d(0)), driveSub);
+    private final PivotToPoint piviotToCenterNoteCommandRED = new PivotToPoint(new Pose2d(13.66, 5.55, new Rotation2d(0)), driveSub);
+    private final PivotToPoint piviotToAmpNoteCommandRED = new PivotToPoint(new Pose2d(13.66, 7, new Rotation2d(0)), driveSub);
+    private final PivotToPoint piviotToStageNoteCommandRED = new PivotToPoint(new Pose2d(13.66, 4.1, new Rotation2d(0)), driveSub);
 
 
     /* CONTROLLERS */
@@ -128,7 +134,6 @@ public class RobotContainer {
 
     private PIDController noteYawPID;
     private PIDController targetYawPID;
-
 
 
     /* AUTO */
@@ -280,8 +285,21 @@ public class RobotContainer {
         NamedCommands.registerCommand("SetShooterMountPositionAmp", setShooterPosAmpCmd);
         NamedCommands.registerCommand("SetShooterMountPositionSpeaker", setShooterPosSpeakerCmd);
         NamedCommands.registerCommand("SetShooterMountPositionFloor", setShooterPosFloorCmd);
-        NamedCommands.registerCommand("SetRotationToSpeaker", piviotToSpeakerCommand);
-        NamedCommands.registerCommand("SetRotationToCenterNote", piviotToCenterNoteCommand);
+
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+            if (alliance.get() == DriverStation.Alliance.Red) {
+                NamedCommands.registerCommand("PivotToSpeaker", piviotToSpeakerCommandRED);
+                NamedCommands.registerCommand("PivotToCenterNote", piviotToCenterNoteCommandRED);
+                NamedCommands.registerCommand("PivotToAmpNote", piviotToAmpNoteCommandRED);
+                NamedCommands.registerCommand("PivotToStageNote", piviotToStageNoteCommandRED);
+            } else {
+                NamedCommands.registerCommand("PivotToSpeaker", piviotToSpeakerCommand);
+                NamedCommands.registerCommand("PivotToCenterNote", piviotToCenterNoteCommand);
+                NamedCommands.registerCommand("PivotToAmpNote", piviotToAmpNoteCommand);
+                NamedCommands.registerCommand("PivotToStageNote", piviotToStageNoteCommand);
+            }
+        }
 
 
         /* SMARTDASHBOARD */

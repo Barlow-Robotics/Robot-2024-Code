@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.4432832152701343,
-        "y": 7.039127249550796
+        "x": 2.6742884457991143,
+        "y": 6.997795722443297
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4970854617635165,
-        "y": 6.659720458329806
+        "x": 2.7280906922924966,
+        "y": 6.618388931222308
       },
       "isLocked": false,
       "linkedName": "[piviot] Amp Note"
@@ -56,7 +56,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 2.2,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
@@ -72,5 +72,5 @@
     "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
