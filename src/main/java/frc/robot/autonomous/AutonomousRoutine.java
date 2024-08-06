@@ -1,6 +1,7 @@
 package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Vision;
 
@@ -12,7 +13,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 public class AutonomousRoutine extends Command {
     private final String name;
     private final Vision visionSub;
-    private final List<PathPlannerAuto> autos;
+    private List<PathPlannerAuto> autos;
     private SequentialCommandGroup commandGroup;
     private boolean autosModified = false;
 
@@ -20,6 +21,7 @@ public class AutonomousRoutine extends Command {
         this.name = name;
         this.visionSub = visionSub;
         this.autos = initializeAutos(name);
+        initializeCommandGroup();
     }
 
     public String getName() {
@@ -48,46 +50,77 @@ public class AutonomousRoutine extends Command {
         return autos;
     }
 
-    @Override
-    public void initialize() {
-        if (!visionSub.noteIsVisible() && !autosModified) {
-            modifyAutosBasedOnVision();
-            autosModified = true;
-        }
-
+    private void initializeCommandGroup() {
         try {
-            List<Command> commands = new ArrayList<>(autos);
+            List<Command> commands = new ArrayList<>();
+            for (PathPlannerAuto auto : autos) {
+                commands.add(new PathPlannerAuto(auto.getName()));  // Ensure new instances
+            }
             commandGroup = new SequentialCommandGroup(commands.toArray(new Command[0]));
-            commandGroup.schedule();
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error initializing commandGroup in initialize: " + e.getMessage());
+            System.out.println("Error initializing commandGroup: " + e.getMessage());
         }
+    }
+
+    @Override
+    public void initialize() {
+        // Initial vision check and possible modification
+        // if (!visionSub.noteIsVisible() && !autosModified) {
+        //     modifyAutosBasedOnVision();
+        //     autosModified = true;
+        // }
+        scheduleCommandGroup();
     }
 
     @Override
     public void execute() {
-        // commandGroup.execute();
+        // Continuously monitor vision input during execution
+        if (visionSub.noteIsVisible() && !autosModified) {
+            modifyAutosBasedOnVision();
+            autosModified = true;
+        }
+        // Command group continues to execute
     }
 
     @Override
     public void end(boolean interrupted) {
-        commandGroup.end(interrupted);
+        if (commandGroup != null) {
+            commandGroup.end(interrupted);
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return commandGroup.isFinished();
+        return commandGroup != null && commandGroup.isFinished();
     }
 
     private void modifyAutosBasedOnVision() {
         try {
-            // PathPlannerAuto autoToMove = new PathPlannerAuto("pathToMove");
-            // autos.remove(autoToMove);
-            // autos.add(0, autoToMove);
+            // Create a new list to store the modified autos
+            List<PathPlannerAuto> modifiedAutos = new ArrayList<>(autos);
+
+            // Example modification: Replace the current path
+            PathPlannerAuto autoToMove = new PathPlannerAuto("Speaker Front 3 Note");
+            modifiedAutos.removeIf(auto -> auto.getName().equals("Four Note Auto"));
+            modifiedAutos.add(autoToMove);
+
+            // Update the autos list with modified paths
+            autos = new ArrayList<>(modifiedAutos);
+
+            // Reinitialize the commandGroup with the modified autos
+            initializeCommandGroup();
+            scheduleCommandGroup();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error modifying autos based on vision: " + e.getMessage());
+        }
+    }
+
+    private void scheduleCommandGroup() {
+        if (commandGroup != null) {
+            CommandScheduler.getInstance().cancelAll(); // Clear all commands
+            CommandScheduler.getInstance().schedule(commandGroup);
         }
     }
 }
