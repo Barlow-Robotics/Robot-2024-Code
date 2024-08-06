@@ -38,6 +38,7 @@ import frc.robot.Constants.ElectronicsIDs;
 import frc.robot.Constants.LogitechExtreme3DConstants;
 // import frc.robot.Constants.ShooterMountConstants;
 import frc.robot.Constants.XboxControllerConstants;
+import frc.robot.autonomous.AutonomousRoutine;
 import frc.robot.commands.DriveRobotWithAprilTagAlign;
 import frc.robot.commands.DriveRobotWithNoteAlign;
 import frc.robot.commands.PivotToPoint;
@@ -308,6 +309,7 @@ public class RobotContainer {
                                                       // delete them there
         SmartDashboard.putData("Selected Auto", autoChooser);
         autoChooser.setDefaultOption("BASIC", new PathPlannerAuto("BASIC"));
+        autoChooser.addOption("Routine A", new AutonomousRoutine("Routine A", visionSub));
         Shuffleboard.getTab("Match").add("Path Name", autoChooser);
 
         /* LOGGING */
@@ -369,6 +371,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         if (autoChooser != null) {
+            System.out.println(autoChooser.getSelected().getClass());
             return autoChooser.getSelected();
         }
         return null;
