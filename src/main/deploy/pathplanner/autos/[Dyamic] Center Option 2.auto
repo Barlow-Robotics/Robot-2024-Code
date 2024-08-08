@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 6.828398255581678,
+      "y": 6.518734242711452
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[Dyamic] Center Option 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[Dyamic] Center Top to Speaker"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Test for Dynamic ",
+  "choreoAuto": false
+}

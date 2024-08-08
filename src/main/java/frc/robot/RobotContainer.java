@@ -310,6 +310,7 @@ public class RobotContainer {
         SmartDashboard.putData("Selected Auto", autoChooser);
         autoChooser.setDefaultOption("BASIC", new PathPlannerAuto("BASIC"));
         autoChooser.addOption("Routine A", new AutonomousRoutine("Routine A", visionSub));
+        autoChooser.addOption("Routine B", new AutonomousRoutine("Routine B", visionSub));
         Shuffleboard.getTab("Match").add("Path Name", autoChooser);
 
         /* LOGGING */

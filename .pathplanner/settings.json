@@ -3,11 +3,13 @@
   "robotLength": 0.93,
   "holonomicMode": true,
   "pathFolders": [
+    "2 Note Front-Speaker",
     "3 Note Test Piviot",
     "Four Note",
-    "2 Note Front-Speaker"
+    "Test For Dynamic"
   ],
   "autoFolders": [
+    "Test for Dynamic ",
     "Piviot"
   ],
   "defaultMaxVel": 3.0,

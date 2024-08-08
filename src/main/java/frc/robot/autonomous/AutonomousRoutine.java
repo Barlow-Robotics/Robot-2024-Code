@@ -17,6 +17,11 @@ public class AutonomousRoutine extends Command {
     private SequentialCommandGroup commandGroup;
     private boolean autosModified = false;
     private int i = 0;
+    private String newAutoCaseVision;
+    private String newAutoCaseNone;
+    private String[] autosToRemove;
+
+
 
     public AutonomousRoutine(String name, Vision visionSub) {
         this.name = name;
@@ -35,10 +40,15 @@ public class AutonomousRoutine extends Command {
             switch (name) {
                 case "Routine A":
                     autos.add(new PathPlannerAuto("Speaker Left 2 Note"));
-                    // autos.add(new PathPlannerAuto("Four Note Auto"));
+                    this.newAutoCaseNone = "Four Note Auto";
+                    this.newAutoCaseVision = "Speaker Front 3 Note";
+                    this.autosToRemove = new String[]{"Speaker Left 2 Note"};
                     break;
                 case "Routine B":
-                    // autos.add(new PathPlannerAuto("(pivot) Front-Speaker to Note"));
+                    autos.add(new PathPlannerAuto("[Dynamic] Center Division"));
+                    this.newAutoCaseNone = "[Dyamic] Center Continue";
+                    this.newAutoCaseVision = "[Dyamic] Center Option 2";
+                    this.autosToRemove = new String[]{"[Dynamic] Center Division"};
                     break;
                 default:
                     autos.add(new PathPlannerAuto("BASIC"));
@@ -73,15 +83,15 @@ public class AutonomousRoutine extends Command {
     @Override
     public void execute() {
         i+=1;
-        if (!noteIsVisible() && !autosModified && i >= 300 && isAutoFinished()) { // after 5 seconds do this
+        if (noteIsVisible() && !autosModified && i >= 300 && isAutoFinished()) { // after 5 seconds do this
             cancelAndScheduleCommandGroup();            
-            modifyAutosBasedOnVision();
+            modifyAutosBasedOnVision(autosToRemove, newAutoCaseVision);
             autosModified = true;
             scheduleCommandGroup();
         }
-        else if (noteIsVisible() && !autosModified && i >= 300 && isAutoFinished()) {
+        else if (!noteIsVisible() && !autosModified && i >= 300 && isAutoFinished()) {
             cancelAndScheduleCommandGroup();            
-            modifyAutosBasedOnNotVision();
+            modifyAutosBasedOnVision(autosToRemove, newAutoCaseNone);
             autosModified = true;
             scheduleCommandGroup();
         }
@@ -96,26 +106,22 @@ public class AutonomousRoutine extends Command {
 
     @Override
     public boolean isFinished() {
-        // Ensure the command group is not finished prematurely
         return commandGroup != null && commandGroup.isFinished();
     }
-    private void modifyAutosBasedOnVision() {
-        // Create a new list to store the modified autos
+
+    private void modifyAutosBasedOnVision(String[] autosToRemove, String newAutoName) {
         List<PathPlannerAuto> modifiedAutos = new ArrayList<>(autos);
 
-        // Example modification: Replace the current path
-        PathPlannerAuto autoToMove = new PathPlannerAuto("Speaker Front 3 Note");
-        modifiedAutos.removeIf(auto -> auto.getName().equals("Speaker Left 2 Note"));
-
+        PathPlannerAuto autoToMove = new PathPlannerAuto(newAutoName);
+        for (String autoName : autosToRemove) {
+            modifiedAutos.removeIf(auto -> auto.getName().equals(autoName));
+        }
         modifiedAutos.add(autoToMove);
-
-        // Update the autos list with modified paths
         autos = new ArrayList<>(modifiedAutos);
 
-        // Reinitialize the command group with the modified autos
         initializeCommandGroup();
     }
-    private void modifyAutosBasedOnNotVision() {
+    private void modifyAutosBasedOnNotVision(String[] autosToRemove, String newAutoName) {
         // Create a new list to store the modified autos
         List<PathPlannerAuto> modifiedAutos = new ArrayList<>(autos);
 
@@ -148,6 +154,6 @@ public class AutonomousRoutine extends Command {
         return !CommandScheduler.getInstance().isScheduled(commandGroup);   
     }
     private boolean noteIsVisible() {
-        return false;
+        return true;
     }
 }
