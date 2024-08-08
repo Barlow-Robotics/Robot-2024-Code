@@ -16,6 +16,7 @@ public class AutonomousRoutine extends Command {
     private List<PathPlannerAuto> autos;
     private SequentialCommandGroup commandGroup;
     private boolean autosModified = false;
+    private int i = 0;
 
     public AutonomousRoutine(String name, Vision visionSub) {
         this.name = name;
@@ -65,22 +66,22 @@ public class AutonomousRoutine extends Command {
 
     @Override
     public void initialize() {
-        // Initial vision check and possible modification
-        // if (!visionSub.noteIsVisible() && !autosModified) {
-        //     modifyAutosBasedOnVision();
-        //     autosModified = true;
-        // }
+        // Ensure initial command group scheduling
         scheduleCommandGroup();
     }
 
     @Override
     public void execute() {
-        // Continuously monitor vision input during execution
-        if (visionSub.noteIsVisible() && !autosModified) {
+        // Debug statements to track vision state and autos modification
+        System.out.println("Vision Note Visible: " + visionSub.noteIsVisible());
+        System.out.println("Autos Modified: " + autosModified);
+        i+=1;
+        // Check if vision note is now visible and autos have not been modified
+        if (!visionSub.noteIsVisible() && !autosModified && i == 300) {
+            cancelAndScheduleCommandGroup();            
             modifyAutosBasedOnVision();
             autosModified = true;
         }
-        // Command group continues to execute
     }
 
     @Override
@@ -92,9 +93,9 @@ public class AutonomousRoutine extends Command {
 
     @Override
     public boolean isFinished() {
+        // Ensure the command group is not finished prematurely
         return commandGroup != null && commandGroup.isFinished();
     }
-
     private void modifyAutosBasedOnVision() {
         try {
             // Create a new list to store the modified autos
@@ -108,9 +109,8 @@ public class AutonomousRoutine extends Command {
             // Update the autos list with modified paths
             autos = new ArrayList<>(modifiedAutos);
 
-            // Reinitialize the commandGroup with the modified autos
+            // Reinitialize the command group with the modified autos
             initializeCommandGroup();
-            scheduleCommandGroup();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error modifying autos based on vision: " + e.getMessage());
@@ -119,8 +119,14 @@ public class AutonomousRoutine extends Command {
 
     private void scheduleCommandGroup() {
         if (commandGroup != null) {
-            CommandScheduler.getInstance().cancelAll(); // Clear all commands
             CommandScheduler.getInstance().schedule(commandGroup);
         }
+    }
+
+    private void cancelAndScheduleCommandGroup() {
+        if (commandGroup != null) {
+            CommandScheduler.getInstance().cancel(commandGroup); // Cancel the current command group
+        }
+        scheduleCommandGroup();
     }
 }

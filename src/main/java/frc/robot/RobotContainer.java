@@ -371,7 +371,6 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         if (autoChooser != null) {
-            System.out.println(autoChooser.getSelected().getClass());
             return autoChooser.getSelected();
         }
         return null;
