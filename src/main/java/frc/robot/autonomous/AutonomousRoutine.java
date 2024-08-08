@@ -17,8 +17,8 @@ public class AutonomousRoutine extends Command {
     private SequentialCommandGroup commandGroup;
     private boolean autosModified = false;
     private int i = 0;
-    private String newAutoCaseVision;
-    private String newAutoCaseNone;
+    private String newAutoCaseNote;
+    private String newAutoCaseNoNote;
     private String[] autosToRemove;
 
 
@@ -40,14 +40,14 @@ public class AutonomousRoutine extends Command {
             switch (name) {
                 case "Routine A":
                     autos.add(new PathPlannerAuto("Speaker Left 2 Note"));
-                    this.newAutoCaseNone = "Four Note Auto";
-                    this.newAutoCaseVision = "Speaker Front 3 Note";
+                    this.newAutoCaseNote = "Speaker Front 3 Note";
+                    this.newAutoCaseNoNote = "Four Note Auto";
                     this.autosToRemove = new String[]{"Speaker Left 2 Note"};
                     break;
                 case "Routine B":
                     autos.add(new PathPlannerAuto("[Dynamic] Center Division"));
-                    this.newAutoCaseNone = "[Dyamic] Center Continue";
-                    this.newAutoCaseVision = "[Dyamic] Center Option 2";
+                    this.newAutoCaseNote = "[Dyamic] Center Continue"; 
+                    this.newAutoCaseNoNote = "[Dyamic] Center Option 2";
                     this.autosToRemove = new String[]{"[Dynamic] Center Division"};
                     break;
                 default:
@@ -85,13 +85,13 @@ public class AutonomousRoutine extends Command {
         i+=1;
         if (noteIsVisible() && !autosModified && i >= 300 && isAutoFinished()) { // after 5 seconds do this
             cancelAndScheduleCommandGroup();            
-            modifyAutosBasedOnVision(autosToRemove, newAutoCaseVision);
+            modifyAutosBasedOnVision(autosToRemove, newAutoCaseNote);
             autosModified = true;
             scheduleCommandGroup();
         }
         else if (!noteIsVisible() && !autosModified && i >= 300 && isAutoFinished()) {
             cancelAndScheduleCommandGroup();            
-            modifyAutosBasedOnVision(autosToRemove, newAutoCaseNone);
+            modifyAutosBasedOnVision(autosToRemove, newAutoCaseNoNote);
             autosModified = true;
             scheduleCommandGroup();
         }
@@ -121,22 +121,6 @@ public class AutonomousRoutine extends Command {
 
         initializeCommandGroup();
     }
-    private void modifyAutosBasedOnNotVision(String[] autosToRemove, String newAutoName) {
-        // Create a new list to store the modified autos
-        List<PathPlannerAuto> modifiedAutos = new ArrayList<>(autos);
-
-        // Example modification: Replace the current path
-        PathPlannerAuto autoToMove = new PathPlannerAuto("Four Note Auto");
-        modifiedAutos.removeIf(auto -> auto.getName().equals("Speaker Left 2 Note"));
-        modifiedAutos.add(autoToMove);
-
-        // Update the autos list with modified paths
-        autos = new ArrayList<>(modifiedAutos);
-
-        // Reinitialize the command group with the modified autos
-        initializeCommandGroup();
-    }
-
 
     private void scheduleCommandGroup() {
         if (commandGroup != null) {
@@ -154,6 +138,6 @@ public class AutonomousRoutine extends Command {
         return !CommandScheduler.getInstance().isScheduled(commandGroup);   
     }
     private boolean noteIsVisible() {
-        return true;
+        return false;
     }
 }
