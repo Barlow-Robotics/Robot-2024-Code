@@ -35,7 +35,7 @@ public class AutonomousRoutine extends Command {
             switch (name) {
                 case "Routine A":
                     autos.add(new PathPlannerAuto("Speaker Left 2 Note"));
-                    autos.add(new PathPlannerAuto("Four Note Auto"));
+                    // autos.add(new PathPlannerAuto("Four Note Auto"));
                     break;
                 case "Routine B":
                     // autos.add(new PathPlannerAuto("(pivot) Front-Speaker to Note"));
@@ -73,14 +73,16 @@ public class AutonomousRoutine extends Command {
     @Override
     public void execute() {
         // Debug statements to track vision state and autos modification
-        System.out.println("Vision Note Visible: " + visionSub.noteIsVisible());
-        System.out.println("Autos Modified: " + autosModified);
+        // System.out.println("Vision Note Visible: " + visionSub.noteIsVisible());
+        // System.out.println("Autos Modified: " + autosModified);
         i+=1;
         // Check if vision note is now visible and autos have not been modified
-        if (!visionSub.noteIsVisible() && !autosModified && i == 300) {
+        // System.out.println(isAutoFinished());
+        if (!visionSub.noteIsVisible() && !autosModified && i >= 300 && isAutoFinished()) {
             cancelAndScheduleCommandGroup();            
             modifyAutosBasedOnVision();
             autosModified = true;
+            scheduleCommandGroup();
         }
     }
 
@@ -104,6 +106,8 @@ public class AutonomousRoutine extends Command {
             // Example modification: Replace the current path
             PathPlannerAuto autoToMove = new PathPlannerAuto("Speaker Front 3 Note");
             modifiedAutos.removeIf(auto -> auto.getName().equals("Four Note Auto"));
+            modifiedAutos.removeIf(auto -> auto.getName().equals("Speaker Left 2 Note"));
+
             modifiedAutos.add(autoToMove);
 
             // Update the autos list with modified paths
@@ -120,6 +124,7 @@ public class AutonomousRoutine extends Command {
     private void scheduleCommandGroup() {
         if (commandGroup != null) {
             CommandScheduler.getInstance().schedule(commandGroup);
+
         }
     }
 
@@ -127,6 +132,9 @@ public class AutonomousRoutine extends Command {
         if (commandGroup != null) {
             CommandScheduler.getInstance().cancel(commandGroup); // Cancel the current command group
         }
-        scheduleCommandGroup();
     }
+    public boolean isAutoFinished() {            
+        return !CommandScheduler.getInstance().isScheduled(commandGroup);   
+    }
+
 }
