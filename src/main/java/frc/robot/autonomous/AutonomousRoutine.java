@@ -72,15 +72,16 @@ public class AutonomousRoutine extends Command {
 
     @Override
     public void execute() {
-        // Debug statements to track vision state and autos modification
-        // System.out.println("Vision Note Visible: " + visionSub.noteIsVisible());
-        // System.out.println("Autos Modified: " + autosModified);
         i+=1;
-        // Check if vision note is now visible and autos have not been modified
-        // System.out.println(isAutoFinished());
-        if (!visionSub.noteIsVisible() && !autosModified && i >= 300 && isAutoFinished()) {
+        if (!noteIsVisible() && !autosModified && i >= 300 && isAutoFinished()) { // after 5 seconds do this
             cancelAndScheduleCommandGroup();            
             modifyAutosBasedOnVision();
+            autosModified = true;
+            scheduleCommandGroup();
+        }
+        else if (noteIsVisible() && !autosModified && i >= 300 && isAutoFinished()) {
+            cancelAndScheduleCommandGroup();            
+            modifyAutosBasedOnNotVision();
             autosModified = true;
             scheduleCommandGroup();
         }
@@ -99,27 +100,37 @@ public class AutonomousRoutine extends Command {
         return commandGroup != null && commandGroup.isFinished();
     }
     private void modifyAutosBasedOnVision() {
-        try {
-            // Create a new list to store the modified autos
-            List<PathPlannerAuto> modifiedAutos = new ArrayList<>(autos);
+        // Create a new list to store the modified autos
+        List<PathPlannerAuto> modifiedAutos = new ArrayList<>(autos);
 
-            // Example modification: Replace the current path
-            PathPlannerAuto autoToMove = new PathPlannerAuto("Speaker Front 3 Note");
-            modifiedAutos.removeIf(auto -> auto.getName().equals("Four Note Auto"));
-            modifiedAutos.removeIf(auto -> auto.getName().equals("Speaker Left 2 Note"));
+        // Example modification: Replace the current path
+        PathPlannerAuto autoToMove = new PathPlannerAuto("Speaker Front 3 Note");
+        modifiedAutos.removeIf(auto -> auto.getName().equals("Speaker Left 2 Note"));
 
-            modifiedAutos.add(autoToMove);
+        modifiedAutos.add(autoToMove);
 
-            // Update the autos list with modified paths
-            autos = new ArrayList<>(modifiedAutos);
+        // Update the autos list with modified paths
+        autos = new ArrayList<>(modifiedAutos);
 
-            // Reinitialize the command group with the modified autos
-            initializeCommandGroup();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error modifying autos based on vision: " + e.getMessage());
-        }
+        // Reinitialize the command group with the modified autos
+        initializeCommandGroup();
     }
+    private void modifyAutosBasedOnNotVision() {
+        // Create a new list to store the modified autos
+        List<PathPlannerAuto> modifiedAutos = new ArrayList<>(autos);
+
+        // Example modification: Replace the current path
+        PathPlannerAuto autoToMove = new PathPlannerAuto("Four Note Auto");
+        modifiedAutos.removeIf(auto -> auto.getName().equals("Speaker Left 2 Note"));
+        modifiedAutos.add(autoToMove);
+
+        // Update the autos list with modified paths
+        autos = new ArrayList<>(modifiedAutos);
+
+        // Reinitialize the command group with the modified autos
+        initializeCommandGroup();
+    }
+
 
     private void scheduleCommandGroup() {
         if (commandGroup != null) {
@@ -136,5 +147,7 @@ public class AutonomousRoutine extends Command {
     public boolean isAutoFinished() {            
         return !CommandScheduler.getInstance().isScheduled(commandGroup);   
     }
-
+    private boolean noteIsVisible() {
+        return false;
+    }
 }
