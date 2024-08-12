@@ -314,6 +314,10 @@ public class RobotContainer {
         autoChooser.setDefaultOption("BASIC", new PathPlannerAuto("BASIC"));
         autoChooser.addOption("Routine A", new AutonomousRoutine("Routine A", visionSub));
         autoChooser.addOption("Routine B", new AutonomousRoutine("Routine B", visionSub));
+        autoChooser.addOption("Choreo", ChoreoAuto("Saved Traj"));
+        // PathPlannerPath exampleChoreoTraj = PathPlannerPath.fromChoreoTrajectory("Example Choreo Traj");
+        // Command command = AutoBuilder.followPath(exampleChoreoTraj);
+
         // new PathPlannerAuto.
         // autoChooser.addOption() d;
 
@@ -396,5 +400,8 @@ public class RobotContainer {
             return autoChooser.getSelected();
         }
         return null;
+    }
+    public Command ChoreoAuto(String name) {
+        return AutoBuilder.followPath(PathPlannerPath.fromChoreoTrajectory(name)); 
     }
 }
