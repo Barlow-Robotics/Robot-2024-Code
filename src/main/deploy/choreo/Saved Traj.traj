@@ -1450,5 +1450,22 @@
       "timestamp": 4.366809398308804
     }
   ],
-  "eventMarkers": []
+  "eventMarkers": [
+    {
+      "timestamp": 4.360559207726805,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SetShooterMountPositionSpeaker"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
 }

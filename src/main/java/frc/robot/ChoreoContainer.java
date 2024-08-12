@@ -8,22 +8,29 @@ import java.time.Instant;
 import java.util.Optional;
 import java.util.OptionalInt;
 import com.choreo.lib.*;
+// import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+// import com.pathplanner.lib.commands.PathPlannerAuto;
+// import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+// import com.pathplanner.lib.util.PathPlannerLogging;
 
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonUtils;
 
-import com.pathplanner.lib.auto.AutoBuilder;
+// import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.PathPlannerLogging;
-import com.pathplanner.lib.util.ReplanningConfig;
+// import com.pathplanner.lib.commands.PathPlannerAuto;
+// import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+// import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+// import com.pathplanner.lib.util.PIDConstants;
+// import com.pathplanner.lib.util.PathPlannerLogging;
+// import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotState;
@@ -31,6 +38,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -136,7 +144,7 @@ public class ChoreoContainer {
 
     private PIDController noteYawPID;
     private PIDController targetYawPID;
-
+    ChoreoTrajectory traj;
 
     /* AUTO */
 
@@ -232,31 +240,11 @@ public class ChoreoContainer {
         climbButton.onTrue(climbCmd);
     }
 
-    public void configurePathPlanner() {
-        
-        /* PATHPLANNER INIT */
-        AutoBuilder.configureHolonomic(
-                // driveSub::getPoseWithoutVision, // Robot pose supplier
-                driveSub::getPose, // Robot pose supplier
-                driveSub::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-                driveSub::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                driveSub::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-                new HolonomicPathFollowerConfig(
-                        new PIDConstants(5, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(5, 0.0, 0.5), // Rotation PID constants
-                        4.59, // Max module speed, in m/s
-                        0.4, // Drive base radius in meters. Distance from robot center to furthest module.
-                        new ReplanningConfig() // Default path replanning config. See the API for the options here
-                ),
-                () -> {
-                    var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Red;
-                    }
-                    return false;
-                },
-                driveSub);
-
+    public void configureChoreo() {
+        // traj = Choreo.getTrajectory("New Path"); // (1)
+        // (2)
+        // traj.addEventMarker("PivotToSpeaker"); // This is a pseudo-code example. Replace with actual Choreo methods.
+        // Choreo.registerCommand("PivotToSpeaker", piviotToSpeakerCommand);
         NamedCommands.registerCommand("StartShooterIntake", startShooterIntakeCmd);
         NamedCommands.registerCommand("StopShooterIntake", stopShooterIntakeCmd);
         NamedCommands.registerCommand("SetShooterMountPositionAmp", setShooterPosAmpCmd);
@@ -281,33 +269,33 @@ public class ChoreoContainer {
 
         /* SMARTDASHBOARD */
 
-        autoChooser = AutoBuilder.buildAutoChooser(); // in order to remove autos, you must log into the roborio and
+        // autoChooser = AutoBuilder.buildAutoChooser(); // in order to remove autos, you must log into the roborio and
                                                       // delete them there
-        SmartDashboard.putData("Selected Auto", autoChooser);
-        autoChooser.setDefaultOption("BASIC", new PathPlannerAuto("BASIC"));
-        autoChooser.addOption("Routine A", new AutonomousRoutine("Routine A", visionSub));
-        autoChooser.addOption("Routine B", new AutonomousRoutine("Routine B", visionSub));
-        Shuffleboard.getTab("Match").add("Path Name", autoChooser);
+        // SmartDashboard.putData("Selected Auto", autoChooser);
+        // autoChooser.setDefaultOption("BASIC", new PathPlannerAuto("BASIC"));
+        // autoChooser.addOption("Routine A", new AutonomousRoutine("Routine A", visionSub));
+        // autoChooser.addOption("Routine B", new AutonomousRoutine("Routine B", visionSub));
+        // Shuffleboard.getTab("Match").add("Path Name", autoChooser);
 
         /* LOGGING */
-        PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
+        // PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
 
-        // var startingPoseTest =
-        // PathPlannerAuto.getStaringPoseFromAutoFile(autoChooser.getSelected()) ;
+        // // var startingPoseTest =
+        // // PathPlannerAuto.getStaringPoseFromAutoFile(autoChooser.getSelected()) ;
 
-        PathPlannerLogging.setLogCurrentPoseCallback(
-                (currentPose) -> {
-                    Logger.recordOutput("Odometry/CurrentPose", currentPose);
-                });
-        PathPlannerLogging.setLogActivePathCallback(
-                (activePath) -> {
-                    Logger.recordOutput(
-                            "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
-                });
-        PathPlannerLogging.setLogTargetPoseCallback(
-                (targetPose) -> {
-                    Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
-                });
+        // PathPlannerLogging.setLogCurrentPoseCallback(
+        //         (currentPose) -> {
+        //             Logger.recordOutput("Odometry/CurrentPose", currentPose);
+        //         });
+        // PathPlannerLogging.setLogActivePathCallback(
+        //         (activePath) -> {
+        //             Logger.recordOutput(
+        //                     "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
+        //         });
+        // PathPlannerLogging.setLogTargetPoseCallback(
+        //         (targetPose) -> {
+        //             Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
+        //         });
     }
 
     public Optional<Rotation2d> getRotationTargetOverride(){
@@ -334,7 +322,7 @@ public class ChoreoContainer {
 
                     // Logger.recordOutput("YawOverrideAlign/targetYaw", bestTarget.get().getYaw());
                     // Logger.recordOutput("YawOverrideAlign/proposed rot", result.get());
-                    // Logger.recordOutput("YawOverrideAlign/rot offset", result.get());
+                            // Logger.recordOutput("YawOverrideAlign/rot offset", result.get());
                 } else {
 
                 }
@@ -347,9 +335,29 @@ public class ChoreoContainer {
     }
 
     public Command getAutonomousCommand() {
-        if (autoChooser != null) {
-            return autoChooser.getSelected();
-        }
-        return null;
+        ChoreoTrajectory traj = Choreo.getTrajectory("Saved Traj"); 
+
+        Command swerveCommand = Choreo.choreoSwerveCommand(
+            traj, // Choreo trajectory
+            driveSub::getPose, // A function that returns the current field-relative pose of the robot
+            new PIDController(5.0, 0.0, 0.0), // PIDController for field-relative X translation (matching your translation PID)
+            new PIDController(5.0, 0.0, 0.0), // PIDController for field-relative Y translation
+            new PIDController(5.0, 0.0, 0.5), // PIDController for rotation (matching your rotation PID)
+            (ChassisSpeeds speeds) -> driveSub.driveRobotRelative(speeds),
+            () -> {
+                Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
+                return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
+            }, // Mirroring the path based on alliance (Red alliance mirrors)
+            driveSub // The subsystem to require, typically your drive subsystem
+        );
+
+
+
+        return Commands.sequence(
+            Commands.runOnce(() -> driveSub.resetOdometry(traj.getInitialPose())),
+            swerveCommand,
+            driveSub.run(() -> driveSub.drive(0, 0, 0, false))
+        );
+
     }
 }

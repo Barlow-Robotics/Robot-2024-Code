@@ -40,16 +40,16 @@
                     "isInitialGuess": false,
                     "translationConstrained": true,
                     "headingConstrained": true,
-                    "controlIntervalCount": 22
+                    "controlIntervalCount": 33
                 },
                 {
-                    "x": 7.694522857666016,
-                    "y": 6.443264961242676,
+                    "x": 8.036985397338867,
+                    "y": 7.5941338539123535,
                     "heading": 0,
                     "isInitialGuess": false,
                     "translationConstrained": false,
                     "headingConstrained": false,
-                    "controlIntervalCount": 16
+                    "controlIntervalCount": 27
                 },
                 {
                     "x": 10,
@@ -1600,29 +1600,22 @@
             "circleObstacles": [],
             "eventMarkers": [
                 {
-                    "name": "SetShooterMountPositionSpeaker",
-                    "target": 2,
-                    "trajTargetIndex": 3,
-                    "targetTimestamp": 4.360559207726805,
-                    "offset": 0,
+                    "name": "StartShooterIntake",
+                    "target": 1,
+                    "trajTargetIndex": null,
+                    "targetTimestamp": null,
+                    "offset": 0.5,
                     "command": {
-                        "type": "parallel",
+                        "type": "named",
                         "data": {
-                            "commands": [
-                                {
-                                    "type": "named",
-                                    "data": {
-                                        "name": "SetShooterMountPositionSpeaker"
-                                    }
-                                }
-                            ]
+                            "name": "StartShooterIntake"
                         }
                     }
                 }
             ],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         }
     },
     "splitTrajectoriesAtStopPoints": false,
-    "usesObstacles": true
+    "usesObstacles": false
 }

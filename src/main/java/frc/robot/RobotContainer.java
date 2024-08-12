@@ -11,10 +11,13 @@ import java.util.OptionalInt;
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonUtils;
 
+import com.choreo.lib.Choreo;
+import com.choreo.lib.ChoreoTrajectory;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -23,6 +26,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotState;
@@ -258,6 +262,7 @@ public class RobotContainer {
 
     public void configurePathPlanner() {
         
+        
         /* PATHPLANNER INIT */
         AutoBuilder.configureHolonomic(
                 // driveSub::getPoseWithoutVision, // Robot pose supplier
@@ -303,14 +308,15 @@ public class RobotContainer {
         }
 
 
-        /* SMARTDASHBOARD */
-
         autoChooser = AutoBuilder.buildAutoChooser(); // in order to remove autos, you must log into the roborio and
                                                       // delete them there
         SmartDashboard.putData("Selected Auto", autoChooser);
         autoChooser.setDefaultOption("BASIC", new PathPlannerAuto("BASIC"));
         autoChooser.addOption("Routine A", new AutonomousRoutine("Routine A", visionSub));
         autoChooser.addOption("Routine B", new AutonomousRoutine("Routine B", visionSub));
+        // new PathPlannerAuto.
+        // autoChooser.addOption() d;
+
         Shuffleboard.getTab("Match").add("Path Name", autoChooser);
 
         /* LOGGING */
@@ -371,6 +377,21 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
+
+        // Command swerveCommand = Choreo.choreoSwerveCommand(
+        //     traj, // Choreo trajectory
+        //     driveSub::getPose, // A function that returns the current field-relative pose of the robot
+        //     new PIDController(5.0, 0.0, 0.0), // PIDController for field-relative X translation (matching your translation PID)
+        //     new PIDController(5.0, 0.0, 0.0), // PIDController for field-relative Y translation
+        //     new PIDController(5.0, 0.0, 0.5), // PIDController for rotation (matching your rotation PID)
+        //     (ChassisSpeeds speeds) -> driveSub.driveRobotRelative(speeds),
+        //     () -> {
+        //         Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
+        //         return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
+        //     }, // Mirroring the path based on alliance (Red alliance mirrors)
+        //     driveSub // The subsystem to require, typically your drive subsystem
+        // );
+
         if (autoChooser != null) {
             return autoChooser.getSelected();
         }
