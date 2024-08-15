@@ -315,9 +315,9 @@ public class RobotContainer {
         autoChooser.setDefaultOption("BASIC", new PathPlannerAuto("BASIC"));
         autoChooser.addOption("Routine A", new DynamicPathPlanner("Routine A", visionSub));
         autoChooser.addOption("Routine B", new DynamicPathPlanner("Routine B", visionSub));
-        autoChooser.addOption("Routine C", new DynamicChoreo("Routine C", visionSub));
+        autoChooser.addOption("Routine C", new DynamicChoreo("Routine C", visionSub, driveSub));
 
-        autoChooser.addOption("Choreo", ChoreoAuto("CompletePath"));
+        autoChooser.addOption("Choreo", driveSub.ChoreoAuto("CompletePath"));
         // autoChooser.addOption("Choreo2", ChoreoAuto("New Path"));
         // autoChooser.addOption("Choreo3", ChoreoAuto("AutoWithSpeaker"));
 
@@ -407,7 +407,5 @@ public class RobotContainer {
         }
         return null;
     }
-    public static Command ChoreoAuto(String name) {
-        return AutoBuilder.followPath(PathPlannerPath.fromChoreoTrajectory(name)); 
-    }
+
 }

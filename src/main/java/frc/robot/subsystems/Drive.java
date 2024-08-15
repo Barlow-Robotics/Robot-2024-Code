@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 import org.littletonrobotics.junction.Logger;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
@@ -20,6 +22,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
@@ -384,6 +388,15 @@ public class Drive extends SubsystemBase {
         int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
         SimDouble angle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
         angle.set(navX.getAngle() - navX.getAngleAdjustment() - Units.radiansToDegrees(twist.dtheta));
+    }
+
+    public Command ChoreoAuto(String name) {
+        PathPlannerPath path = PathPlannerPath.fromChoreoTrajectory(name);
+        return AutoBuilder.followPath(path).alongWith(Commands.runOnce(() -> resetOdometry(path.getStartingDifferentialPose())));
+    }
+    public Command ChoreoAutoWithoutReset(String name) {
+        PathPlannerPath path = PathPlannerPath.fromChoreoTrajectory(name);
+        return AutoBuilder.followPath(path);
     }
 
 }

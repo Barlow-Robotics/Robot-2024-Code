@@ -1,10 +1,12 @@
 package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Vision;
 import frc.robot.RobotContainer;
 
 public class DynamicChoreo extends Command {
+    private final Drive driveSub;
 
     private final Vision visionSub;
     private String mainPath;
@@ -18,17 +20,18 @@ public class DynamicChoreo extends Command {
     private boolean path1Completed;
 
 
-    public DynamicChoreo(String name, Vision visionSubsystem) {
+    public DynamicChoreo(String name, Vision visionSubsystem, Drive driveSub) {
         this.visionSub = visionSubsystem;
+        this.driveSub = driveSub;
         initializeAutos(name);
         addRequirements(visionSubsystem);
     }
 
     @Override
     public void initialize() {
-        currentCommand = RobotContainer.ChoreoAuto(mainPath);
-        noteCommand = RobotContainer.ChoreoAuto(newAutoCaseNote);
-        noNoteCommand = RobotContainer.ChoreoAuto(newAutoCaseNoNote);
+        currentCommand = driveSub.ChoreoAuto(mainPath);
+        noteCommand = driveSub.ChoreoAutoWithoutReset(newAutoCaseNote);
+        noNoteCommand = driveSub.ChoreoAutoWithoutReset(newAutoCaseNoNote);
         currentCommand.schedule();
         path1Completed = false;
     }
