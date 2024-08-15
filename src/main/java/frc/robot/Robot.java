@@ -77,7 +77,9 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putNumber("Shooter/SpeakerHeightMiddle", Constants.ShooterMountConstants.MidSpeakerHeight);
         SmartDashboard.putNumber("Shooter/FerryUpper", Constants.ShooterConstants.TopFerryRPM);
         SmartDashboard.putNumber("Shooter/FerryLower", Constants.ShooterConstants.BottomFerryRPM);
+
         SmartDashboard.putNumber("isAdjusting", 0);
+        SmartDashboard.putNumber("Auto/NoteIsVisible", 0);
     }
 
     @Override

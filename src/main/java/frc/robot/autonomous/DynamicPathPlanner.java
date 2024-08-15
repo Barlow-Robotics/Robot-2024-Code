@@ -3,6 +3,8 @@ package frc.robot.autonomous;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.ShooterMountConstants;
 import frc.robot.subsystems.Vision;
 
 import java.util.ArrayList;
@@ -84,13 +86,13 @@ public class DynamicPathPlanner extends Command {
     @Override
     public void execute() {
         i+=1;
-        if (noteIsVisible() && !autosModified && i >= 300 && isAutoFinished()) { // after 5 seconds do this
+        if (noteIsVisible() == 1 && !autosModified && i >= 300 && isAutoFinished()) { // after 5 seconds do this
             cancelAndScheduleCommandGroup();            
             modifyAutosBasedOnVision(autosToRemove, newAutoCaseNote);
             autosModified = true;
             scheduleCommandGroup();
         }
-        else if (!noteIsVisible() && !autosModified && i >= 300 && isAutoFinished()) {
+        else if (!(noteIsVisible() == 1) && !autosModified && i >= 300 && isAutoFinished()) {
             cancelAndScheduleCommandGroup();            
             modifyAutosBasedOnVision(autosToRemove, newAutoCaseNoNote);
             autosModified = true;
@@ -138,7 +140,8 @@ public class DynamicPathPlanner extends Command {
     public boolean isAutoFinished() {            
         return !CommandScheduler.getInstance().isScheduled(commandGroup);   
     }
-    public static boolean noteIsVisible() {
-        return false;
+    public static double noteIsVisible() {
+        return AutoConstants.noteIsVisible.get();
     }
+
 }

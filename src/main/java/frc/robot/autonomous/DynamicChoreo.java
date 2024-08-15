@@ -3,6 +3,8 @@ package frc.robot.autonomous;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Vision;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.ShooterMountConstants;
 import frc.robot.RobotContainer;
 
 public class DynamicChoreo extends Command {
@@ -59,7 +61,7 @@ public class DynamicChoreo extends Command {
 
     private void decideNextPath() {
         if (path1Completed) {
-            if (noteIsVisible()) {
+            if (noteIsVisible() == 1) {
                 currentCommand.cancel();
                 currentCommand = noteCommand;
             } else {
@@ -81,7 +83,7 @@ public class DynamicChoreo extends Command {
             currentCommand.end(interrupted);
         }
     }
-    public static boolean noteIsVisible() {
-        return true;
+    public static double noteIsVisible() {
+        return AutoConstants.noteIsVisible.get();
     }
 }

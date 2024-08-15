@@ -178,6 +178,8 @@ public class Constants {
 
 
     public static final class AutoConstants {
+        public static TuneableParameter noteIsVisible = new TuneableParameter(0, 1, 0, true, "Auto/NoteIsVisible");
+
         public static final double MaxSpeedMetersPerSecond = DriveConstants.MaxModuleMetersPerSecond / 4; // CHANGE
         public static final double MaxAngularSpeedRadiansPerSecond = DriveConstants.PhysicalMaxAngularSpeedRadiansPerSecond / 10; // Default is 540 degress
         public static final double kPXController = 1;

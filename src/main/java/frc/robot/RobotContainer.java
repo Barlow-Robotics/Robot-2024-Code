@@ -387,21 +387,6 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-
-        // Command swerveCommand = Choreo.choreoSwerveCommand(
-        //     traj, // Choreo trajectory
-        //     driveSub::getPose, // A function that returns the current field-relative pose of the robot
-        //     new PIDController(5.0, 0.0, 0.0), // PIDController for field-relative X translation (matching your translation PID)
-        //     new PIDController(5.0, 0.0, 0.0), // PIDController for field-relative Y translation
-        //     new PIDController(5.0, 0.0, 0.5), // PIDController for rotation (matching your rotation PID)
-        //     (ChassisSpeeds speeds) -> driveSub.driveRobotRelative(speeds),
-        //     () -> {
-        //         Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
-        //         return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
-        //     }, // Mirroring the path based on alliance (Red alliance mirrors)
-        //     driveSub // The subsystem to require, typically your drive subsystem
-        // );
-
         if (autoChooser != null) {
             return autoChooser.getSelected();
         }
