@@ -26,8 +26,6 @@ public class DynamicPathPlanner extends Command {
     public DynamicPathPlanner(String name, Vision visionSub) {
         this.name = name;
         this.visionSub = visionSub;
-        this.autos = initializeAutos(name);
-        initializeCommandGroup();
     }
 
     public String getName() {
@@ -76,6 +74,9 @@ public class DynamicPathPlanner extends Command {
 
     @Override
     public void initialize() {
+        this.autos = initializeAutos(name);
+        initializeCommandGroup();
+        autosModified = false;
         // Ensure initial command group scheduling
         scheduleCommandGroup();
     }
