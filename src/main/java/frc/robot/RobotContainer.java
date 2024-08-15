@@ -42,7 +42,8 @@ import frc.robot.Constants.ElectronicsIDs;
 import frc.robot.Constants.LogitechExtreme3DConstants;
 // import frc.robot.Constants.ShooterMountConstants;
 import frc.robot.Constants.XboxControllerConstants;
-import frc.robot.autonomous.AutonomousRoutine;
+import frc.robot.autonomous.DynamicChoreo;
+import frc.robot.autonomous.DynamicPathPlanner;
 import frc.robot.commands.DriveRobotWithAprilTagAlign;
 import frc.robot.commands.DriveRobotWithNoteAlign;
 import frc.robot.commands.PivotToPoint;
@@ -312,11 +313,13 @@ public class RobotContainer {
                                                       // delete them there
         SmartDashboard.putData("Selected Auto", autoChooser);
         autoChooser.setDefaultOption("BASIC", new PathPlannerAuto("BASIC"));
-        autoChooser.addOption("Routine A", new AutonomousRoutine("Routine A", visionSub));
-        autoChooser.addOption("Routine B", new AutonomousRoutine("Routine B", visionSub));
+        autoChooser.addOption("Routine A", new DynamicPathPlanner("Routine A", visionSub));
+        autoChooser.addOption("Routine B", new DynamicPathPlanner("Routine B", visionSub));
+        autoChooser.addOption("Routine C", new DynamicChoreo("Routine C", visionSub));
+
         autoChooser.addOption("Choreo", ChoreoAuto("CompletePath"));
-        autoChooser.addOption("Choreo2", ChoreoAuto("New Path"));
-        autoChooser.addOption("Choreo3", ChoreoAuto("AutoWithSpeaker"));
+        // autoChooser.addOption("Choreo2", ChoreoAuto("New Path"));
+        // autoChooser.addOption("Choreo3", ChoreoAuto("AutoWithSpeaker"));
 
         // PathPlannerPath exampleChoreoTraj = PathPlannerPath.fromChoreoTrajectory("Example Choreo Traj");
         // Command command = AutoBuilder.followPath(exampleChoreoTraj);
@@ -404,7 +407,7 @@ public class RobotContainer {
         }
         return null;
     }
-    public Command ChoreoAuto(String name) {
+    public static Command ChoreoAuto(String name) {
         return AutoBuilder.followPath(PathPlannerPath.fromChoreoTrajectory(name)); 
     }
 }

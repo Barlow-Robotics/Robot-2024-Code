@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
-public class AutonomousRoutine extends Command {
+public class DynamicPathPlanner extends Command {
     private final String name;
     private final Vision visionSub;
     private List<PathPlannerAuto> autos;
@@ -23,7 +23,7 @@ public class AutonomousRoutine extends Command {
 
 
 
-    public AutonomousRoutine(String name, Vision visionSub) {
+    public DynamicPathPlanner(String name, Vision visionSub) {
         this.name = name;
         this.visionSub = visionSub;
         this.autos = initializeAutos(name);
@@ -137,7 +137,7 @@ public class AutonomousRoutine extends Command {
     public boolean isAutoFinished() {            
         return !CommandScheduler.getInstance().isScheduled(commandGroup);   
     }
-    private boolean noteIsVisible() {
+    public static boolean noteIsVisible() {
         return false;
     }
 }

@@ -47,7 +47,7 @@ import frc.robot.Constants.ElectronicsIDs;
 import frc.robot.Constants.LogitechExtreme3DConstants;
 // import frc.robot.Constants.ShooterMountConstants;
 import frc.robot.Constants.XboxControllerConstants;
-import frc.robot.autonomous.AutonomousRoutine;
+import frc.robot.autonomous.DynamicPathPlanner;
 import frc.robot.commands.DriveRobotWithAprilTagAlign;
 import frc.robot.commands.DriveRobotWithNoteAlign;
 import frc.robot.commands.PivotToPoint;
