@@ -73,6 +73,9 @@ public class Drive extends SubsystemBase {
 
     private final Vision visionSub;
 
+    private Pose2d currPose2d;
+    private Pose2d lastPose2d;
+
     // private final AprilTagFieldLayout aprilTagFieldLayout;
 
     public Drive(Vision visionSub) {
@@ -135,6 +138,7 @@ public class Drive extends SubsystemBase {
         //     layout = null;
         // }
         // this.aprilTagFieldLayout = layout;
+        lastPose2d = this.getPose();
 
     }
 
@@ -178,6 +182,11 @@ public class Drive extends SubsystemBase {
         SwerveModuleState[] swerveModuleActualStates = new SwerveModuleState[] { frontLeft.getState(),
                 frontRight.getState(), backLeft.getState(), backRight.getState() };
         logData(swerveModuleActualStates);
+        if (currPose2d != null) {
+                lastPose2d = currPose2d;
+        }
+        currPose2d = this.getPose();
+        
     }
 
     private void logData(SwerveModuleState[] swerveModuleActualStates) {
@@ -397,6 +406,10 @@ public class Drive extends SubsystemBase {
     public Command ChoreoAutoWithoutReset(String name) {
         PathPlannerPath path = PathPlannerPath.fromChoreoTrajectory(name);
         return AutoBuilder.followPath(path);
+    }
+
+    public boolean isMoving() {
+        return lastPose2d.equals(currPose2d);
     }
 
 }

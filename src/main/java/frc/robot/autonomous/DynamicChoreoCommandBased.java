@@ -10,15 +10,11 @@ import frc.robot.subsystems.Vision;
 import frc.robot.Constants.AutoConstants;
 
 public class DynamicChoreoCommandBased extends SequentialCommandGroup {
-    private final Drive driveSub;
-    private final Vision visionSub;
     private String mainPath;
     private String newAutoCaseNote;
     private String newAutoCaseNoNote;
 
     public DynamicChoreoCommandBased(String name, Vision visionSubsystem, Drive driveSub) {
-        this.visionSub = visionSubsystem;
-        this.driveSub = driveSub;
         initializeAutos(name);
 
         addCommands(
