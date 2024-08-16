@@ -42,6 +42,7 @@ import frc.robot.Constants.ElectronicsIDs;
 import frc.robot.Constants.LogitechExtreme3DConstants;
 // import frc.robot.Constants.ShooterMountConstants;
 import frc.robot.Constants.XboxControllerConstants;
+import frc.robot.autonomous.DynamicChoreoCommandBased;
 import frc.robot.autonomous.DynamicChoreo;
 import frc.robot.autonomous.DynamicPathPlanner;
 import frc.robot.commands.DriveRobotWithAprilTagAlign;
@@ -316,6 +317,7 @@ public class RobotContainer {
         autoChooser.addOption("Routine A", new DynamicPathPlanner("Routine A", visionSub));
         autoChooser.addOption("Routine B", new DynamicPathPlanner("Routine B", visionSub));
         autoChooser.addOption("Routine C", new DynamicChoreo("Routine C", visionSub, driveSub));
+        autoChooser.addOption("Routine D", new DynamicChoreoCommandBased("Routine D", visionSub, driveSub));
 
         autoChooser.addOption("Choreo", driveSub.ChoreoAuto("CompletePath"));
         // autoChooser.addOption("Choreo2", ChoreoAuto("New Path"));
