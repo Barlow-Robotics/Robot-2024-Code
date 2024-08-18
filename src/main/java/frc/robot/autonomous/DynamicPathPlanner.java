@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.ShooterMountConstants;
+// import frc.robot.Constants.ShooterMountConstants;
 import frc.robot.subsystems.Vision;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 public class DynamicPathPlanner extends Command {
     private final String name;
-    private final Vision visionSub;
+    // private final Vision visionSub;
     private List<PathPlannerAuto> autos;
     private SequentialCommandGroup commandGroup;
     private boolean autosModified = false;
@@ -27,7 +27,7 @@ public class DynamicPathPlanner extends Command {
 
     public DynamicPathPlanner(String name, Vision visionSub) {
         this.name = name;
-        this.visionSub = visionSub;
+        // this.visionSub = visionSub;
     }
 
     public String getName() {

@@ -4,13 +4,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Vision;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.ShooterMountConstants;
-import frc.robot.RobotContainer;
 
 public class DynamicChoreo extends Command {
     private final Drive driveSub;
 
-    private final Vision visionSub;
+    // private final Vision visionSub;
     private String mainPath;
     private String newAutoCaseNote;
     private String newAutoCaseNoNote;
@@ -23,10 +21,10 @@ public class DynamicChoreo extends Command {
 
 
     public DynamicChoreo(String name, Vision visionSubsystem, Drive driveSub) {
-        this.visionSub = visionSubsystem;
+        // this.visionSub = visionSubsystem;
         this.driveSub = driveSub;
         initializeAutos(name);
-        addRequirements(visionSubsystem);
+        addRequirements(visionSubsystem, driveSub);
     }
 
     @Override
