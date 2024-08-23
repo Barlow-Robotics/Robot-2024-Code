@@ -324,6 +324,14 @@ public class RobotContainer {
         
 
         autoChooser.addOption("Choreo", driveSub.ChoreoAuto("CompletePath"));
+                autoChooser.addOption("Test1", driveSub.ChoreoAutoWithoutReset("Test1"));
+                autoChooser.addOption("Test2", driveSub.ChoreoAuto("Test2"));
+                autoChooser.addOption("Test3", driveSub.ChoreoAuto("Test3"));
+                autoChooser.addOption("Test4", driveSub.ChoreoAuto("Test4"));
+                autoChooser.addOption("Test5", driveSub.ChoreoAuto("Test5"));
+                autoChooser.addOption("Test6", driveSub.ChoreoAuto("Test6"));
+
+
         // autoChooser.addOption("Choreo2", ChoreoAuto("New Path"));
         // autoChooser.addOption("Choreo3", ChoreoAuto("AutoWithSpeaker"));
 

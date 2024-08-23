@@ -335,7 +335,7 @@ public class ChoreoContainer {
     }
 
     public Command getAutonomousCommand() {
-        ChoreoTrajectory traj = Choreo.getTrajectory("Saved Traj"); 
+        ChoreoTrajectory traj = Choreo.getTrajectory("Test1"); 
 
         Command swerveCommand = Choreo.choreoSwerveCommand(
             traj, // Choreo trajectory
