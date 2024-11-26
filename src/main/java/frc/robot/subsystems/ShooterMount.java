@@ -332,11 +332,7 @@ public class ShooterMount extends SubsystemBase {
         // deltaY is the difference in height of target (a little over the bottom of
         // speaker opening) and the current
         // elevator position.
-        if(ShooterConstants.isAdjusting.get() == 1){
-            desiredHeight = ShooterMountConstants.MidSpeakerHeight2.get();
-        } else {
-            desiredHeight = ShooterMountConstants.MidSpeakerHeight;
-        }
+        desiredHeight = ShooterMountConstants.MidSpeakerHeight;
         double height = desiredHeight - Constants.ShooterMountConstants.SpeakerHeight;
         height = Units.inchesToMeters(height);
 
