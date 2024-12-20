@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.736399320305035,
+        "y": 5.558817358043924
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.101913724927194,
+        "y": 7.281429436580101
+      },
+      "isLocked": false,
+      "linkedName": "[dynamic] midnote"
+    },
+    {
+      "anchor": {
+        "x": 6.828398255581678,
+        "y": 6.518734242711452
+      },
+      "prevControl": {
+        "x": 5.896408028429868,
+        "y": 6.675553165684336
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "[dyanmic] center dic"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Test For Dynamic",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
