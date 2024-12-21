@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 
 import com.ctre.phoenix6.StatusCode;
@@ -46,18 +48,19 @@ public class ShooterMount extends SubsystemBase {
     TalonFX angleMotor;
     private final TalonFXSimState angleMotorSim;
     
-    private final DCMotorSim angleMotorModel = new DCMotorSim(edu.wpi.first.math.system.plant.DCMotor.getFalcon500(1),
-            1, Constants.jKgMetersSquared);
+    private final DCMotorSim angleMotorModel = new DCMotorSim(
+        LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1), Constants.jKgMetersSquared, 1), DCMotor.getKrakenX60Foc(1));
+
 
     TalonFX leftElevatorMotor;
     private final TalonFXSimState leftElevatorMotorSim;
     private final DCMotorSim leftElevatorMotorModel = new DCMotorSim(
-            edu.wpi.first.math.system.plant.DCMotor.getFalcon500(1), 1, Constants.jKgMetersSquared);
+        LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1), Constants.jKgMetersSquared, 1), DCMotor.getKrakenX60Foc(1));
 
     TalonFX rightElevatorMotor;
     private final TalonFXSimState rightElevatorMotorSim;
     private final DCMotorSim rightElevatorMotorModel = new DCMotorSim(
-            edu.wpi.first.math.system.plant.DCMotor.getFalcon500(1), 1, Constants.jKgMetersSquared);
+        LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1), Constants.jKgMetersSquared, 1), DCMotor.getKrakenX60Foc(1));
 
     DigitalInput bottomHallEffect;
     DIOSim bottomHallEffectSim;
@@ -426,7 +429,7 @@ public class ShooterMount extends SubsystemBase {
         Logger.recordOutput("ShooterMount/Height/Right/TempC", rightElevatorMotor.getDeviceTemp().getValue());
         Logger.recordOutput("ShooterMount/Height/Right/RotationsActual", rightElevatorMotor.getPosition().getValueAsDouble());
         Logger.recordOutput("ShooterMount/Height/Right/RotationsDesired", rightElevatorMotor.getClosedLoopReference().getValue());
-        Logger.recordOutput("ShooterMount/Height/Right/RPSActual", rightElevatorMotor.getVelocity().getValueAsDouble();
+        Logger.recordOutput("ShooterMount/Height/Right/RPSActual", rightElevatorMotor.getVelocity().getValueAsDouble());
         Logger.recordOutput("ShooterMount/Height/Right/AccelerationActual", rightElevatorMotor.getAcceleration().getValue());
     }
 

@@ -2,8 +2,10 @@ package frc.robot.sim;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.sim.TalonFXSimState;
+import com.google.flatbuffers.Constants;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.sim.PhysicsSim.SimProfile;
@@ -26,6 +28,9 @@ class TalonFXSimProfile extends SimProfile {
      */
     public TalonFXSimProfile(final TalonFX falcon, final double rotorInertia) {
         this._motorSim = new DCMotorSim(DCMotor.getFalcon500Foc(1), 1.0, rotorInertia);
+        new DCMotorSim(
+        LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1), Constants.jKgMetersSquared, 1), DCMotor.getKrakenX60Foc(1));
+
         this._falconSim = falcon.getSimState();
     }
 

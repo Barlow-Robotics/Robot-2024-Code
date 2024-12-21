@@ -34,18 +34,18 @@ public class Shooter extends SubsystemBase {
     private final TalonFX topFlywheelMotor;
     private final TalonFXSimState leftFlywheelMotorSim;
     private final DCMotorSim lowerMotorModel = new DCMotorSim(
-        LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1), Constants.jKgMetersSquared, Constants.ShooterConstants.FlywheelGearRatio), DCMotor.getKrakenX60Foc(1));
+        LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1), Constants.jKgMetersSquared, 1), DCMotor.getKrakenX60Foc(1));
 
     private final TalonFX bottomFlywheelMotor;
     private final TalonFXSimState rightFlywheelMotorSim;
     private final DCMotorSim upperMotorModel = new DCMotorSim(
-        LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1), Constants.jKgMetersSquared, Constants.ShooterConstants.FlywheelGearRatio), DCMotor.getKrakenX60Foc(1));
+        LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1), Constants.jKgMetersSquared, 1), DCMotor.getKrakenX60Foc(1));
 
 
     private final TalonFX indexMotor;
     private final TalonFXSimState indexMotorSim;
     private final DCMotorSim indexMotorModel = new DCMotorSim(
-        LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1), Constants.jKgMetersSquared, Constants.ShooterConstants.FlywheelGearRatio), DCMotor.getKrakenX60Foc(1));
+        LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1), Constants.jKgMetersSquared, 1), DCMotor.getKrakenX60Foc(1));
 
 
     private final VelocityVoltage voltageVelocity = new VelocityVoltage(0, 0, true, 0, 0,

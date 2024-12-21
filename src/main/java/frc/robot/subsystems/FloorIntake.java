@@ -14,6 +14,8 @@ import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,8 +29,9 @@ public class FloorIntake extends SubsystemBase {
 
     TalonFX intakeMotor;
     private final TalonFXSimState intakeMotorSim;
-    private final DCMotorSim intakeMotorModel = new DCMotorSim(edu.wpi.first.math.system.plant.DCMotor.getKrakenX60(1),
-            1, Constants.jKgMetersSquared);
+    private final DCMotorSim intakeMotorModel = new DCMotorSim(
+        LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1), Constants.jKgMetersSquared, 1), DCMotor.getKrakenX60Foc(1));
+
 
     private final VelocityVoltage voltageVelocity = new VelocityVoltage(0, 0, true, 0, 0,
             false, false, false);
