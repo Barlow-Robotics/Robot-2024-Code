@@ -104,8 +104,8 @@ public class Vision extends SubsystemBase {
     public Vision() /* throws IOException */ {
         targetCamera = new PhotonCamera(TargetCameraName);
         poseCamera = new PhotonCamera(PoseCameraName);
-        // photonEstimator = new PhotonPoseEstimator(FieldTagLayout, PrimaryVisionStrategy, PoseCameraToRobot);
-        photonEstimator = new PhotonPoseEstimator(FieldTagLayout, PrimaryVisionStrategy, poseCamera, PoseCameraToRobot);
+        photonEstimator = new PhotonPoseEstimator(FieldTagLayout, PrimaryVisionStrategy, PoseCameraToRobot);
+        // photonEstimator = new PhotonPoseEstimator(FieldTagLayout, PrimaryVisionStrategy, poseCamera, PoseCameraToRobot);
         photonEstimator.setMultiTagFallbackStrategy(FallbackVisionStrategy);
 
         alliance = DriverStation.Alliance.Red;
@@ -426,7 +426,7 @@ public class Vision extends SubsystemBase {
      */
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
         if (poseCamera.isConnected()) {
-            var visionEst = photonEstimator.update();
+            var visionEst = photonEstimator.update(poseCamera.getLatestResult());
             double latestTimestamp = poseCamera.getLatestResult().getTimestampSeconds();
             boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;
             if (Robot.isSimulation()) {

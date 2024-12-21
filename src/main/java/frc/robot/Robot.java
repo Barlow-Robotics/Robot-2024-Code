@@ -140,9 +140,8 @@ public class Robot extends LoggedRobot {
         } else {
             var selectedAutoCommand = robotContainer.getAutonomousCommand();
             if (selectedAutoCommand != autonomousCommand) {
-                var fileName = selectedAutoCommand.getName();
                 try {
-                    Pose2d startingPose = PathPlannerAuto.getStaringPoseFromAutoFile(fileName);
+                    Pose2d startingPose = new PathPlannerAuto(selectedAutoCommand).getStartingPose();
                     robotContainer.driveSub.resetOdometry(startingPose);
                     autonomousCommand = selectedAutoCommand;
                 } catch (Exception ex) {
