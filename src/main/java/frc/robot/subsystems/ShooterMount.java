@@ -17,7 +17,6 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -537,7 +536,7 @@ public class ShooterMount extends SubsystemBase {
     private void applyAngleEncoderConfigs() {
         MagnetSensorConfigs magnetConfig = new MagnetSensorConfigs();
         var canCoderConfiguration = new CANcoderConfiguration();
-        magnetConfig.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+        magnetConfig.AbsoluteSensorDiscontinuityPoint = 0.5;
         if (!Robot.isSimulation()) {
             magnetConfig.MagnetOffset = ShooterMountConstants.AngleCANCoderMagnetOffset;
         } else {

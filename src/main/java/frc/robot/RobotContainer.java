@@ -23,7 +23,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.util.PathPlannerLogging;
-import com.pathplanner.lib.config.ReplanningConfig;
+// import com.pathplanner.lib.config.ReplanningConfig;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -46,7 +46,7 @@ import frc.robot.Constants.ElectronicsIDs;
 import frc.robot.Constants.LogitechExtreme3DConstants;
 // import frc.robot.Constants.ShooterMountConstants;
 import frc.robot.Constants.XboxControllerConstants;
-import frc.robot.autonomous.DynamicChoreoCommandd;
+import frc.robot.autonomous.DynamicChoreoCommandBased;
 import frc.robot.autonomous.DynamicChoreo;
 import frc.robot.autonomous.DynamicPathPlanner;
 import frc.robot.commands.DriveRobotWithAprilTagAlign;
@@ -275,6 +275,7 @@ public class RobotContainer {
         } catch (Exception e) {
             // Handle exception as needed
             e.printStackTrace();
+            config = null;
         }
             
         /* PATHPLANNER INIT */
@@ -286,10 +287,10 @@ public class RobotContainer {
                 (speeds, feedforwards) -> driveSub.driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new PPHolonomicDriveController(
                         new PIDConstants(5, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(5, 0.0, 0.5), // Rotation PID constants
-                        4.59, // Max module speed, in m/s
-                        0.4, // Drive base radius in meters. Distance from robot center to furthest module.
-                        new ReplanningConfig() // Default path replanning config. See the API for the options here
+                        new PIDConstants(5, 0.0, 0.5) // Rotation PID constants
+                        // 4.59, // Max module speed, in m/s
+                        // 0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+                        // new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
                 config,
                 () -> {
@@ -331,7 +332,7 @@ public class RobotContainer {
         autoChooser.addOption("Routine A", new DynamicPathPlanner("Routine A", visionSub));
         autoChooser.addOption("Routine B", new DynamicPathPlanner("Routine B", visionSub));
         autoChooser.addOption("Routine C", new DynamicChoreo("Routine C", visionSub, driveSub));
-        autoChooser.addOption("Routine D", new DynamicChoreoCommandd("Routine D", visionSub, driveSub));
+        autoChooser.addOption("Routine D", new DynamicChoreoCommandBased("Routine D", visionSub, driveSub));
 
 
 

@@ -6,18 +6,15 @@ package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.sim.CANcoderSimState;
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.REVPhysicsSim;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -27,20 +24,22 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 import frc.robot.Robot;
 import frc.robot.Constants.DriveConstants;
 
 public class SwerveModule {
 
-    private final CANSparkMax driveMotor;
+    private final SparkMax driveMotor;
     private final RelativeEncoder driveEncoder;
-    public final SparkPIDController drivePIDController;
+    public final SparkClosedLoopController drivePIDController;
 
-    private final CANSparkMax turnMotor;
+    private final SparkMax turnMotor;
     private final CANcoder turnEncoder;
     public final ProfiledPIDController turnPIDController;
     private final SimpleMotorFeedforward TurnFF = new SimpleMotorFeedforward(0, 0.4); // Need to change these #'s
-
+    SimDeviceSim driveMotorSim;
+    SimDeviceSim turnMotorSim;
     private String swerveName;
 
     public SwerveModule(
@@ -51,12 +50,18 @@ public class SwerveModule {
             double magnetOffset,
             boolean reversed) {
 
+            
+
         /* Set up drive motor and encoder */
         swerveName = name;
-        driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
+        driveMotor = new SparkMax(driveMotorID, MotorType.kBrushless);
         driveMotor.restoreFactoryDefaults();
         driveMotor.setIdleMode(IdleMode.kBrake);
         driveMotor.setInverted(reversed);
+
+        driveMotorSim = new SimDeviceSim("SPARK MAX [" + driveMotor.getDeviceId() + "]");
+        turnMotorSim = new SimDeviceSim("SPARK MAX [" + turnMotor.getDeviceId() + "]");
+
         
         driveEncoder = driveMotor.getEncoder();
         resetEncoders();
@@ -79,7 +84,7 @@ public class SwerveModule {
         drivePIDController.setOutputRange(-1, 1);
 
         /* Set up turn motor and encoder */
-        turnMotor = new CANSparkMax(turningMotorID, MotorType.kBrushless);
+        turnMotor = new SparkMax(turningMotorID, MotorType.kBrushless);
         turnMotor.restoreFactoryDefaults();
         turnMotor.setIdleMode(IdleMode.kBrake);
         turnMotor.setInverted(true);
@@ -87,7 +92,7 @@ public class SwerveModule {
         turnEncoder = new CANcoder(turnEncoderID, "rio");
         var canCoderConfiguration = new CANcoderConfiguration();
         MagnetSensorConfigs magnetConfig = new MagnetSensorConfigs();
-        magnetConfig.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+        magnetConfig.AbsoluteSensorDiscontinuityPoint = 0.5;
         if (!Robot.isSimulation()) {
             magnetConfig.MagnetOffset = magnetOffset;
         } else {
@@ -171,7 +176,11 @@ public class SwerveModule {
     }
 
     public void simulationInit() {
-        REVPhysicsSim.getInstance().addSparkMax(driveMotor, DCMotor.getNEO(1));
-        REVPhysicsSim.getInstance().addSparkMax(turnMotor, DCMotor.getNEO(1));
+        driveMotorSim.getDouble("Position").set(0.0);
+        turnMotorSim.getDouble("Position").set(0.0);
+    
+        // You can also simulate velocity, temperature, etc.
+        driveMotorSim.getDouble("Velocity").set(0.0);
+        turnMotorSim.getDouble("Velocity").set(0.0);
     }
 }

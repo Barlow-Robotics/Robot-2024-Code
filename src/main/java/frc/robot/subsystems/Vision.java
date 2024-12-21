@@ -104,7 +104,7 @@ public class Vision extends SubsystemBase {
     public Vision() /* throws IOException */ {
         targetCamera = new PhotonCamera(TargetCameraName);
         poseCamera = new PhotonCamera(PoseCameraName);
-
+        // photonEstimator = new PhotonPoseEstimator(FieldTagLayout, PrimaryVisionStrategy, PoseCameraToRobot);
         photonEstimator = new PhotonPoseEstimator(FieldTagLayout, PrimaryVisionStrategy, poseCamera, PoseCameraToRobot);
         photonEstimator.setMultiTagFallbackStrategy(FallbackVisionStrategy);
 

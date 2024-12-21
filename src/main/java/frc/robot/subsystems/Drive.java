@@ -3,9 +3,11 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-import org.littletonrobotics.junction.Logger;
+import java.io.IOException;
+import org.json.simple.parser.ParseException;
 
-import com.kauailabs.navx.frc.AHRS;
+import org.littletonrobotics.junction.Logger;
+import com.studica.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
@@ -63,7 +65,7 @@ public class Drive extends SubsystemBase {
             Math.toDegrees(DriveConstants.BackRightMagnetOffsetInRadians) / 360.0,
             true);
 
-    private AHRS navX;
+    private AHRS navX; 
 
     private final SwerveDriveOdometry odometry;
 
@@ -79,8 +81,9 @@ public class Drive extends SubsystemBase {
     // private final AprilTagFieldLayout aprilTagFieldLayout;
 
     public Drive(Vision visionSub) {
+        navX = new AHRS(AHRS.NavXComType.kMXP_SPI, 100);
 
-        navX = new AHRS(Port.kMXP);
+        // navX = new AHRS(Port.kMXP);
         // new Thread(() -> {
         // try {
         // Thread.sleep(1000);
@@ -400,11 +403,29 @@ public class Drive extends SubsystemBase {
     }
 
     public Command ChoreoAuto(String name) {
-        PathPlannerPath path = PathPlannerPath.fromChoreoTrajectory(name);
-        return AutoBuilder.followPath(path).alongWith(Commands.runOnce(() -> resetOdometry(path.getStartingDifferentialPose())));
-    }
+        try {
+                PathPlannerPath path = PathPlannerPath.fromChoreoTrajectory(name);
+                return AutoBuilder.followPath(path).alongWith(Commands.runOnce(() -> resetOdometry(path.getStartingDifferentialPose())));
+                // Do something with the path
+        } catch (IOException e) {
+                e.printStackTrace(); // Handle the IOException (e.g., log it or notify the user)
+        } catch (ParseException e) {
+                e.printStackTrace(); // Handle the ParseException (e.g., log it or notify the user)
+        }
+        return Commands.none();
+        }
     public Command ChoreoAutoWithoutReset(String name) {
-        PathPlannerPath path = PathPlannerPath.fromChoreoTrajectory(name);
+        PathPlannerPath path;
+        try {
+                path = PathPlannerPath.fromChoreoTrajectory(name);
+                // Do something with the path
+        } catch (IOException e) {
+                e.printStackTrace(); // Handle the IOException (e.g., log it or notify the user)
+                path = null;
+        } catch (ParseException e) {
+                e.printStackTrace(); // Handle the ParseException (e.g., log it or notify the user)
+                path = null;
+        }
         return AutoBuilder.followPath(path);
     }
 

@@ -63,13 +63,13 @@ public class FloorIntake extends SubsystemBase {
     }
 
     public boolean isIntaking() {
-        return intakeMotor.getVelocity().getValue() >= (FloorIntakeConstants.MotorRPM / 60) - FloorIntakeConstants.VelocityTolerance;
+        return intakeMotor.getVelocity().getValue().baseUnitMagnitude() >= (FloorIntakeConstants.MotorRPM / 60) - FloorIntakeConstants.VelocityTolerance;
     }
 
     /* LOGGING */
 
     private void logData() {
-        Logger.recordOutput("FloorIntake/RPMActual", intakeMotor.getVelocity().getValue() * 60);
+        Logger.recordOutput("FloorIntake/RPMActual", intakeMotor.getVelocity().getValue().baseUnitMagnitude() * 60);
         Logger.recordOutput("FloorIntake/IsIntaking", isIntaking());
         Logger.recordOutput("FloorIntake/CurrentSupply", intakeMotor.getSupplyCurrent().getValue());
     }

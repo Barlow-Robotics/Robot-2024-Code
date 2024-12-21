@@ -6,9 +6,9 @@ package frc.robot;
 
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
+// import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+// import com.pathplanner.lib.util.PIDConstants;
+// import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -168,12 +168,12 @@ public class Constants {
         public static final int StallLimit = 40;
         public static final int FreeLimit = 40;
 
-        public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-            new PIDConstants(5.0, 0, 0), // Translation constants
-            new PIDConstants(5.0, 0, 0), // Rotation constants
-            MaxModuleMetersPerSecond,
-            flModuleOffset.getNorm(), // Drive base radius (distance from center to furthest module)
-            new ReplanningConfig());
+        // public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
+        //     new PIDConstants(5.0, 0, 0), // Translation constants
+        //     new PIDConstants(5.0, 0, 0), // Rotation constants
+        //     MaxModuleMetersPerSecond,
+        //     flModuleOffset.getNorm(), // Drive base radius (distance from center to furthest module)
+        //     new ReplanningConfig());
     }
 
 

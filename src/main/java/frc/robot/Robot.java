@@ -11,18 +11,21 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 //import org.xml.sax.ErrorHandler;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.revrobotics.REVPhysicsSim;
+import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.ElectronicsIDs;
+import frc.robot.sim.PhysicsSim;
 import edu.wpi.first.hal.AllianceStationID;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
+import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -139,7 +142,7 @@ public class Robot extends LoggedRobot {
             if (selectedAutoCommand != autonomousCommand) {
                 var fileName = selectedAutoCommand.getName();
                 try {
-                    var startingPose = PathPlannerAuto.getStaringPoseFromAutoFile(fileName);
+                    Pose2d startingPose = PathPlannerAuto.getStaringPoseFromAutoFile(fileName);
                     robotContainer.driveSub.resetOdometry(startingPose);
                     autonomousCommand = selectedAutoCommand;
                 } catch (Exception ex) {
@@ -190,7 +193,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void simulationPeriodic() {
-        REVPhysicsSim.getInstance().run();
+        PhysicsSim.getInstance().run();
 
         var simPose = robotContainer.driveSub.getPose();
 
@@ -226,4 +229,9 @@ public class Robot extends LoggedRobot {
          * ->SetPoses(drivetrain.GetModulePoses());
          */
     }
+    // public startPysicsSim() {
+    //     SimDeviceSim motorSim = new SimDeviceSim("SPARK MAX [1]");
+    //     motorSim.getDouble("Position").set(0.0);
+    //     motorSim.getDouble("Velocity").set(0.0);
+    // }
 }
