@@ -45,6 +45,7 @@ public class ShooterMount extends SubsystemBase {
 
     TalonFX angleMotor;
     private final TalonFXSimState angleMotorSim;
+    
     private final DCMotorSim angleMotorModel = new DCMotorSim(edu.wpi.first.math.system.plant.DCMotor.getFalcon500(1),
             1, Constants.jKgMetersSquared);
 
@@ -222,16 +223,16 @@ public class ShooterMount extends SubsystemBase {
             actualState = desiredState;
         }
 
-        if ((isAtBottom() && leftElevatorMotor.getVelocity().getValue() < 0) ||
+        if ((isAtBottom() && leftElevatorMotor.getVelocity().getValueAsDouble() < 0) ||
                 (getHeightInches() == ShooterMountConstants.MaxHeightInches
-                        && leftElevatorMotor.getVelocity().getValue() > 0)) {
+                        && leftElevatorMotor.getVelocity().getValueAsDouble() > 0)) {
             stopElevatorMotor();
         }
 
         if ((getAngleCANCoderDegrees() == ShooterMountConstants.MinAngleDegrees
-                && angleMotor.getVelocity().getValue() < 0) ||
+                && angleMotor.getVelocity().getValueAsDouble() < 0) ||
                 (getHeightInches() == ShooterMountConstants.MaxAngleDegrees
-                        && angleMotor.getVelocity().getValue() > 0)) {
+                        && angleMotor.getVelocity().getValueAsDouble() > 0)) {
             stopAngleMotor();
         }
 
@@ -255,11 +256,11 @@ public class ShooterMount extends SubsystemBase {
     }
 
     public double getAngleCANCoderDegrees() {
-        return Units.rotationsToDegrees(angleCANCoder.getAbsolutePosition().getValue());
+        return Units.rotationsToDegrees(angleCANCoder.getAbsolutePosition().getValue().baseUnitMagnitude());
     }
 
     private double getTalonEncoderDegrees() {
-        return Units.rotationsToDegrees(angleMotor.getPosition().getValue());
+        return Units.rotationsToDegrees(angleMotor.getPosition().getValue().baseUnitMagnitude());
     }
 
     /* ELEVATOR */
@@ -277,7 +278,7 @@ public class ShooterMount extends SubsystemBase {
     }
 
     public double getHeightInches() {
-        double elevatorHeight = ((leftElevatorMotor.getPosition().getValue()
+        double elevatorHeight = ((leftElevatorMotor.getPosition().getValue().baseUnitMagnitude()
                 / ShooterMountConstants.RotationsPerElevatorInch) * 2)
                 + ShooterMountConstants.StartingHeight;
         return elevatorHeight;
@@ -403,7 +404,7 @@ public class ShooterMount extends SubsystemBase {
         Logger.recordOutput("ShooterMount/Angle/VoltageActual", angleMotor.getMotorVoltage().getValue());
         Logger.recordOutput("ShooterMount/Angle/ClosedLoopError", angleMotor.getClosedLoopError().getValue());
         Logger.recordOutput("ShooterMount/Angle/SupplyCurrent", angleMotor.getSupplyCurrent().getValue());
-        Logger.recordOutput("ShooterMount/Angle/RPSActual", angleMotor.getVelocity().getValue());
+        Logger.recordOutput("ShooterMount/Angle/RPSActual", angleMotor.getVelocity().getValueAsDouble());
         Logger.recordOutput("ShooterMount/Angle/AccelerationActual", angleMotor.getAcceleration().getValue());
 
         Logger.recordOutput("ShooterMount/Height/InchesDesired", desiredHeight);
@@ -416,7 +417,7 @@ public class ShooterMount extends SubsystemBase {
         Logger.recordOutput("ShooterMount/Height/Left/ControlMode", leftElevatorMotor.getControlMode().getValue());
         Logger.recordOutput("ShooterMount/Height/Left/RotationsActual", leftElevatorMotor.getPosition().getValueAsDouble());
         Logger.recordOutput("ShooterMount/Height/Left/RotationsDesired", leftElevatorMotor.getClosedLoopReference().getValue());
-        Logger.recordOutput("ShooterMount/Height/Left/RPSActual", leftElevatorMotor.getVelocity().getValue());
+        Logger.recordOutput("ShooterMount/Height/Left/RPSActual", leftElevatorMotor.getVelocity().getValueAsDouble());
         Logger.recordOutput("ShooterMount/Height/Left/AccelerationActual", leftElevatorMotor.getAcceleration().getValue());
 
         Logger.recordOutput("ShooterMount/Height/Right/VoltageActual", rightElevatorMotor.getMotorVoltage().getValue());
@@ -425,7 +426,7 @@ public class ShooterMount extends SubsystemBase {
         Logger.recordOutput("ShooterMount/Height/Right/TempC", rightElevatorMotor.getDeviceTemp().getValue());
         Logger.recordOutput("ShooterMount/Height/Right/RotationsActual", rightElevatorMotor.getPosition().getValueAsDouble());
         Logger.recordOutput("ShooterMount/Height/Right/RotationsDesired", rightElevatorMotor.getClosedLoopReference().getValue());
-        Logger.recordOutput("ShooterMount/Height/Right/RPSActual", rightElevatorMotor.getVelocity().getValue());
+        Logger.recordOutput("ShooterMount/Height/Right/RPSActual", rightElevatorMotor.getVelocity().getValueAsDouble();
         Logger.recordOutput("ShooterMount/Height/Right/AccelerationActual", rightElevatorMotor.getAcceleration().getValue());
     }
 

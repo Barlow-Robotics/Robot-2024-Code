@@ -20,6 +20,9 @@ import com.ctre.phoenix6.sim.TalonFXSimState;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.hal.ConstantsJNI;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -30,18 +33,20 @@ import frc.robot.sim.PhysicsSim;
 public class Shooter extends SubsystemBase {
     private final TalonFX topFlywheelMotor;
     private final TalonFXSimState leftFlywheelMotorSim;
-    private final DCMotorSim lowerMotorModel = new DCMotorSim(edu.wpi.first.math.system.plant.DCMotor.getKrakenX60(1),
-            1, Constants.jKgMetersSquared);
+    private final DCMotorSim lowerMotorModel = new DCMotorSim(
+        LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1), Constants.jKgMetersSquared, Constants.ShooterConstants.FlywheelGearRatio), DCMotor.getKrakenX60Foc(1));
 
     private final TalonFX bottomFlywheelMotor;
     private final TalonFXSimState rightFlywheelMotorSim;
-    private final DCMotorSim upperMotorModel = new DCMotorSim(edu.wpi.first.math.system.plant.DCMotor.getKrakenX60(1),
-            1, Constants.jKgMetersSquared);
+    private final DCMotorSim upperMotorModel = new DCMotorSim(
+        LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1), Constants.jKgMetersSquared, Constants.ShooterConstants.FlywheelGearRatio), DCMotor.getKrakenX60Foc(1));
+
 
     private final TalonFX indexMotor;
     private final TalonFXSimState indexMotorSim;
-    private final DCMotorSim indexMotorModel = new DCMotorSim(edu.wpi.first.math.system.plant.DCMotor.getKrakenX60(1),
-            1, Constants.jKgMetersSquared);
+    private final DCMotorSim indexMotorModel = new DCMotorSim(
+        LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1), Constants.jKgMetersSquared, Constants.ShooterConstants.FlywheelGearRatio), DCMotor.getKrakenX60Foc(1));
+
 
     private final VelocityVoltage voltageVelocity = new VelocityVoltage(0, 0, true, 0, 0,
             false, false, false);
@@ -104,11 +109,11 @@ public class Shooter extends SubsystemBase {
     }
 
     private double getRPM(TalonFX motor) {
-        return motor.getVelocity().getValue() * Constants.SecondsPerMinute;
+        return motor.getVelocity().getValueAsDouble() * Constants.SecondsPerMinute;
     }
 
     public boolean isShooting() {
-        return topFlywheelMotor.getVelocity().getValue() > 0;
+        return topFlywheelMotor.getVelocity().getValueAsDouble() > 0;
     }
 
     public boolean isWithinFlywheelVelocityTolerance(double desiredLeftRPM, double desiredRightRPM) {
