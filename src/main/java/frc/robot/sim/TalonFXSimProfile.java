@@ -27,9 +27,7 @@ class TalonFXSimProfile extends SimProfile {
      *                        Rotational Inertia of the mechanism at the rotor
      */
     public TalonFXSimProfile(final TalonFX falcon, final double rotorInertia) {
-        this._motorSim = new DCMotorSim(DCMotor.getFalcon500Foc(1), 1.0, rotorInertia);
-        new DCMotorSim(
-        LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1), Constants.jKgMetersSquared, 1), DCMotor.getKrakenX60Foc(1));
+        this._motorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1), rotorInertia, 1), DCMotor.getKrakenX60Foc(1));
 
         this._falconSim = falcon.getSimState();
     }
