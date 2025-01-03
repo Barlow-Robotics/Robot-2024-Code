@@ -13,8 +13,12 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -28,11 +32,13 @@ import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 import frc.robot.Robot;
 import frc.robot.Constants.DriveConstants;
 
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.SignalsConfig;
+
 public class SwerveModule {
 
     private final SparkMax driveMotor;
     private final RelativeEncoder driveEncoder;
-    public final SparkClosedLoopController drivePIDController;
 
     private final SparkMax turnMotor;
     private final CANcoder turnEncoder;
@@ -41,6 +47,8 @@ public class SwerveModule {
     SimDeviceSim driveMotorSim;
     SimDeviceSim turnMotorSim;
     private String swerveName;
+    public final SparkClosedLoopController drivePIDController;
+
 
     public SwerveModule(
             String name,
@@ -49,16 +57,20 @@ public class SwerveModule {
             int turnEncoderID,
             double magnetOffset,
             boolean reversed) {
+        turnMotor = new SparkMax(turningMotorID, SparkLowLevel.MotorType.kBrushless);
 
-            
+        SparkMaxConfig driveSparkMaxConfig = new SparkMaxConfig();
+        SparkMaxConfig turnSparkMaxConfig = new SparkMaxConfig();
 
         /* Set up drive motor and encoder */
         swerveName = name;
-        driveMotor = new SparkMax(driveMotorID, MotorType.kBrushless);
-        driveMotor.restoreFactoryDefaults();
-        driveMotor.setIdleMode(IdleMode.kBrake);
-        driveMotor.setInverted(reversed);
+        driveMotor = new SparkMax(driveMotorID, SparkLowLevel.MotorType.kBrushless);
 
+        drivePIDController = driveMotor.getClosedLoopController();
+        // driveMotor.restoreFactoryDefaults();
+        driveSparkMaxConfig
+            .inverted(reversed)
+            .idleMode(IdleMode.kBrake);
         driveMotorSim = new SimDeviceSim("SPARK MAX [" + driveMotor.getDeviceId() + "]");
         turnMotorSim = new SimDeviceSim("SPARK MAX [" + turnMotor.getDeviceId() + "]");
 
@@ -66,28 +78,27 @@ public class SwerveModule {
         driveEncoder = driveMotor.getEncoder();
         resetEncoders();
 
-        driveEncoder.setVelocityConversionFactor(DriveConstants.VelocityConversionFactor);
 
         double localPositionConversionFactor = DriveConstants.PositionConversionFactor;
         if (RobotBase.isSimulation()) {
             localPositionConversionFactor *= 1000;
         }
-        driveEncoder.setPositionConversionFactor(localPositionConversionFactor);
+        
+        driveSparkMaxConfig.encoder
+            .positionConversionFactor(localPositionConversionFactor)
+            .velocityConversionFactor(DriveConstants.VelocityConversionFactor);
 
+        // sparkMax
         /* Config drive motor PID */
-        drivePIDController = driveMotor.getPIDController();
-        drivePIDController.setP(DriveConstants.DriveKP);
-        drivePIDController.setI(DriveConstants.DriveKI);
-        drivePIDController.setD(DriveConstants.DriveKD);
-        drivePIDController.setIZone(DriveConstants.DriveIZone);
-        drivePIDController.setFF(DriveConstants.DriveFF);
-        drivePIDController.setOutputRange(-1, 1);
-
+        driveSparkMaxConfig.closedLoop
+            .pidf(DriveConstants.DriveKP, DriveConstants.DriveKI, DriveConstants.DriveKD, DriveConstants.DriveFF)
+            .iZone(DriveConstants.DriveIZone)
+            .outputRange(-1, 1);        
         /* Set up turn motor and encoder */
-        turnMotor = new SparkMax(turningMotorID, MotorType.kBrushless);
-        turnMotor.restoreFactoryDefaults();
-        turnMotor.setIdleMode(IdleMode.kBrake);
-        turnMotor.setInverted(true);
+        // turnMotor.restoreFactoryDefaults();
+        turnSparkMaxConfig
+            .inverted(true)
+            .idleMode(IdleMode.kBrake);
 
         turnEncoder = new CANcoder(turnEncoderID, "rio");
         var canCoderConfiguration = new CANcoderConfiguration();
@@ -115,9 +126,14 @@ public class SwerveModule {
 
                 turnPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
-        // wpk test - current limits result in slow module rotation. need to investigate further
-        driveMotor.setSmartCurrentLimit(DriveConstants.StallLimit, DriveConstants.FreeLimit);
-        turnMotor.setSmartCurrentLimit(DriveConstants.StallLimit, DriveConstants.FreeLimit);
+        // wpk test - current limitrrs result in slow module rotation. need to investigate further
+        driveSparkMaxConfig.smartCurrentLimit(DriveConstants.StallLimit, DriveConstants.FreeLimit);
+        turnSparkMaxConfig.smartCurrentLimit(DriveConstants.StallLimit, DriveConstants.FreeLimit);
+
+        driveMotor.configure(driveSparkMaxConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+        turnMotor.configure(turnSparkMaxConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+        // driveMotor.smartCurrentLimit(DriveConstants.StallLimit, DriveConstants.FreeLimit);
+        // turnMotor.setSmartCurrentLimit(DriveConstants.StallLimit, DriveConstants.FreeLimit);
 
     }
 
