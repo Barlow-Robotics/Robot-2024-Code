@@ -1,12 +1,5 @@
 {
-  "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 0.7260057714559877,
-      "y": 6.716076233078392
-    },
-    "rotation": -119.41283211323923
-  },
+  "version": "2025.0",
   "command": {
     "type": "sequential",
     "data": {
@@ -286,6 +279,7 @@
       ]
     }
   },
+  "resetOdom": true,
   "folder": "Piviot",
   "choreoAuto": false
 }
