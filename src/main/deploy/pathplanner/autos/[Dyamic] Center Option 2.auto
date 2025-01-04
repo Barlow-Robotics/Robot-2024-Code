@@ -1,0 +1,25 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[Dyamic] Center Option 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[Dyamic] Center Top to Speaker"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Test for Dynamic ",
+  "choreoAuto": false
+}

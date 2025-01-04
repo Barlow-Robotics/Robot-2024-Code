@@ -1,0 +1,78 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.6742884457991143,
+        "y": 6.997795722443297
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.7280906922924966,
+        "y": 6.618388931222308
+      },
+      "isLocked": false,
+      "linkedName": "[piviot] Amp Note"
+    },
+    {
+      "anchor": {
+        "x": 2.8207897063942275,
+        "y": 5.786176257537701
+      },
+      "prevControl": {
+        "x": 2.5952478386438256,
+        "y": 6.457813573034554
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.75,
+      "rotationDegrees": -71.22000000000003
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "start Intake",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "StartShooterIntake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.2,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -71.22000000000003
+  },
+  "reversed": false,
+  "folder": "3 Note Test Piviot",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": false
+}
