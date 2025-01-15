@@ -341,20 +341,20 @@ public class RobotContainer {
         autoChooser.setDefaultOption("BASIC", new PathPlannerAuto("BASIC"));
         autoChooser.addOption("Routine A", new DynamicPathPlanner("Routine A", visionSub));
         autoChooser.addOption("Routine B", new DynamicPathPlanner("Routine B", visionSub));
-        autoChooser.addOption("Routine C", new DynamicChoreo("Routine C", visionSub, driveSub));
-        autoChooser.addOption("Routine D", new DynamicChoreoCommand("Routine D", visionSub, driveSub));
+        // autoChooser.addOption("Routine C", new DynamicChoreo("Routine C", visionSub, driveSub));
+        // autoChooser.addOption("Routine D", new DynamicChoreoCommand("Routine D", visionSub, driveSub));
 
 
 
         
 
-        autoChooser.addOption("Choreo", driveSub.ChoreoAuto("CompletePath"));
-                autoChooser.addOption("Test1", driveSub.ChoreoAutoWithoutReset("Test1"));
-                autoChooser.addOption("Test2", driveSub.ChoreoAuto("Test2"));
-                autoChooser.addOption("Test3", driveSub.ChoreoAuto("Test3"));
-                autoChooser.addOption("Test4", driveSub.ChoreoAuto("Test4"));
-                autoChooser.addOption("Test5", driveSub.ChoreoAuto("Test5"));
-                autoChooser.addOption("Test6", driveSub.ChoreoAuto("Test6"));
+        // autoChooser.addOption("Choreo", driveSub.ChoreoAuto("CompletePath"));
+        // autoChooser.addOption("Test1", driveSub.ChoreoAutoWithoutReset("Test1"));
+        // autoChooser.addOption("Test2", driveSub.ChoreoAuto("Test2"));
+        // autoChooser.addOption("Test3", driveSub.ChoreoAuto("Test3"));
+        // autoChooser.addOption("Test4", driveSub.ChoreoAuto("Test4"));
+        // autoChooser.addOption("Test5", driveSub.ChoreoAuto("Test5"));
+        // autoChooser.addOption("Test6", driveSub.ChoreoAuto("Test6"));
 
 
         // autoChooser.addOption("Choreo2", ChoreoAuto("New Path"));
