@@ -715,4 +715,7 @@ public class Vision extends SubsystemBase {
     public double getNoteWidth() {
         return this.noteWidth;
     }
+    public List<PhotonTrackedTarget> getAllDetectedTargets() {
+        return this.allDetectedTargets;
+    }
 }

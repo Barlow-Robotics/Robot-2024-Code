@@ -541,6 +541,7 @@ public class ShooterMount extends SubsystemBase {
         MagnetSensorConfigs magnetConfig = new MagnetSensorConfigs();
         var canCoderConfiguration = new CANcoderConfiguration();
         magnetConfig.AbsoluteSensorDiscontinuityPoint = 0.5;
+        
         if (!Robot.isSimulation()) {
             magnetConfig.MagnetOffset = ShooterMountConstants.AngleCANCoderMagnetOffset;
         } else {

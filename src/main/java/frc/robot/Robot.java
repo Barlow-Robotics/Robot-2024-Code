@@ -35,7 +35,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 
 public class Robot extends LoggedRobot {
     private Command autonomousCommand;
-
+    private Command currentTeleopCommand;
     private RobotContainer robotContainer;
 
     Mechanism2d shooterMountMechanism = new Mechanism2d(24, 24);
@@ -43,6 +43,7 @@ public class Robot extends LoggedRobot {
     MechanismLigament2d wrist;
 
     boolean pathPlannerConfigured = false ;
+    boolean currentlyFollowingAPath = false;
 
     @Override
     public void robotInit() {
@@ -165,6 +166,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopInit() {
+        currentlyFollowingAPath = false;
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
@@ -172,6 +174,22 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopPeriodic() {
+        if (robotContainer.getCoralVision()) { // button is pressed and I want to look for april tag and move with auto
+            Command selectedAutoCommand = robotContainer.getVisionPathPlannerPathing();
+            if (!currentlyFollowingAPath && selectedAutoCommand != null) {
+                currentlyFollowingAPath = true;
+                currentTeleopCommand = selectedAutoCommand;
+                selectedAutoCommand.schedule();
+            }
+        }
+        if (currentlyFollowingAPath == true && currentTeleopCommand != null && currentTeleopCommand.isFinished()) { // if finished tell currentlyFollowingAPath. 
+            currentlyFollowingAPath = false;
+            currentTeleopCommand = null;
+        }
+        if (currentlyFollowingAPath) {
+            
+            // check the driver controller that it hasnt moved too much. 
+        }
     }
 
     @Override
