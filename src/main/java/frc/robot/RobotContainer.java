@@ -344,10 +344,6 @@ public class RobotContainer {
         // autoChooser.addOption("Routine C", new DynamicChoreo("Routine C", visionSub, driveSub));
         // autoChooser.addOption("Routine D", new DynamicChoreoCommand("Routine D", visionSub, driveSub));
 
-
-
-        
-
         // autoChooser.addOption("Choreo", driveSub.ChoreoAuto("CompletePath"));
         // autoChooser.addOption("Test1", driveSub.ChoreoAutoWithoutReset("Test1"));
         // autoChooser.addOption("Test2", driveSub.ChoreoAuto("Test2"));
